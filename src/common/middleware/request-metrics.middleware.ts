@@ -7,10 +7,8 @@ export class RequestMetricsMiddleware implements NestMiddleware {
   use(request: Request, response: Response, next: NextFunction): void {
     const startedAt = Date.now();
 
-    // TODO (Task 1): preserve the request id when a client sends x-request-id.
-    // TODO (Task 1): generate a UUID when x-request-id is missing.
-    const requestId = randomUUID();
-
+    const headerId = request.headers['x-request-id'];
+    const requestId = (Array.isArray(headerId) ? headerId[0] : headerId) || randomUUID();
     response.setHeader('x-request-id', requestId);
 
     response.on('finish', () => {
